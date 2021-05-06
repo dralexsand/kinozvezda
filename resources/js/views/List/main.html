@@ -1,0 +1,145 @@
+<b-container class="w-100">
+    <h5>{{ message }}</h5>
+
+    <hr>
+
+    <b-row>
+
+        <b-col>
+            <h6>Поиск по полу</h6>
+            <select v-model="gender_value">
+                <option disabled value="">Выберите пол</option>
+                <option>male</option>
+                <option>female</option>
+            </select>
+        </b-col>
+
+        <b-col>
+            <h6>Поиск по возрасту</h6>
+            <input v-model="age_value" placeholder="Возраст">
+        </b-col>
+
+        <b-col>
+            <h6>Поиск по имени</h6>
+            <input v-model="name_search" placeholder="Поиск по имени">
+        </b-col>
+
+        <b-col>
+            <button
+                type="button"
+                class="btn btn-primary"
+                @click.prevent="getPosts()"
+            >
+                Apply
+            </button>
+        </b-col>
+
+    </b-row>
+
+    <hr>
+
+    <div v-if="errored" class="alert alert-danger" role="alert">
+        No records
+    </div>
+
+    <b-container v-else>
+
+        <div v-if="loading">Loading...</div>
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li
+                    :class="{disabled: !pagination.prev_page_url}"
+                    @click.prevent="getPosts(pagination.prev_page_url)"
+                    class="page-item">
+                    <a
+                        aria-label="Previous"
+                        class="page-link"
+                        href=""
+                    >
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+
+                <li
+                    class="page-item disabled">
+                    <a class="page-link" href="">
+                        Page is {{ pagination.current_page }} of {{ pagination.last_page }}
+                    </a>
+                </li>
+
+                <li
+                    :class="{disabled: !pagination.next_page_url}"
+                    @click.prevent="getPosts(pagination.next_page_url)"
+                    class="page-item">
+                    <a
+                        aria-label="Next"
+                        class="page-link"
+                        href=""
+                    >
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+
+        <b-row>
+
+            <b-col v-for="post in posts" :key="post.id">
+
+                <CardBox
+                    :card_title="post.last_name + ' ' + post.first_name"
+                    :card_img_src="post.photos[0]['path']"
+                    :card_img_alt="post.last_name + ' ' + post.first_name"
+                    :card_tag="post.last_name + ' ' + post.first_name"
+                    :card_description="post.gender + ', ' + post.age"
+                    :link="'/profile/' + post.user_id"
+                    :linkuser="'/userprofile/' + post.user_id"
+                ></CardBox>
+
+            </b-col>
+
+        </b-row>
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li
+                    :class="{disabled: !pagination.prev_page_url}"
+                    @click.prevent="getPosts(pagination.prev_page_url)"
+                    class="page-item">
+                    <a
+                        aria-label="Previous"
+                        class="page-link"
+                        href=""
+                    >
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+
+                <li
+                    class="page-item disabled">
+                    <a class="page-link" href="">
+                        Page is {{ pagination.current_page }} of {{ pagination.last_page }}
+                    </a>
+                </li>
+
+                <li
+                    :class="{disabled: !pagination.next_page_url}"
+                    @click.prevent="getPosts(pagination.next_page_url)"
+                    class="page-item">
+                    <a
+                        aria-label="Next"
+                        class="page-link"
+                        href=""
+                    >
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+
+    </b-container>
+
+</b-container>
